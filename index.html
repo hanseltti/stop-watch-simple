@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+                body{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        button{
+            margin-bottom: 1rem;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Stop Watch</h1>
+    <h2 id="time">00:00:00</h2>
+    <button type="button" onclick="startClock()">Start</button>
+    <button type="button" onclick="stopClock()">Stop</button>
+    <button type="button" onclick="resetClock()">Reset</button>
+
+    <script>
+      let secondsElapsed = 0; // Variable que almacena el número total de segundos transcurridos.
+      let interval = null; // Variable que almacenará el ID del intervalo del temporizador.
+      const time = document.getElementById("time"); // Selecciona el elemento HTML con el ID 'time' para mostrar el tiempo.
+
+      const paddingStart = (value) => {
+        return String(value).padStart(2, "0"); // Convierte el valor a cadena y añade ceros al inicio si es necesario, para que siempre tenga al menos dos dígitos.
+      };
+
+      const setTime = () => {
+        const hours = Math.floor(secondsElapsed / 3600); // Calcula las horas totales a partir de los segundos transcurridos.
+        const minutes = Math.floor(secondsElapsed / 60); // Calcula los minutos totales a partir de los segundos transcurridos.
+        const seconds = Math.floor(secondsElapsed % 60); // Calcula los segundos restantes que no forman parte de las horas y minutos.
+        time.innerHTML = `${paddingStart(hours)}:${paddingStart(
+          minutes
+        )}:${paddingStart(seconds)}`; // Actualiza el contenido del elemento HTML 'time' con el tiempo formateado (HH:MM:SS).
+      };
+
+      const timer = () => {
+        secondsElapsed++; // Incrementa en uno el número total de segundos transcurridos.
+        setTime(); // Actualiza la visualización del tiempo en la página.
+      };
+
+      const startClock = () => {
+        if (interval) {
+          // Si ya hay un intervalo activo, lo detiene para evitar múltiples temporizadores simultáneos.
+          stopClock(); // Llama a la función que detiene el intervalo activo.
+        }
+
+        interval = setInterval(timer, 1000); // Inicia un nuevo intervalo que ejecuta la función 'timer' cada 1000 milisegundos (1 segundo).
+      };
+
+      const stopClock = () => {
+        clearInterval(interval); // Detiene el intervalo activo, deteniendo así el temporizador.
+      };
+
+      const resetClock = () => {
+        stopClock(); // Detiene el temporizador si está corriendo.
+        secondsElapsed = 0; // Reinicia el contador de segundos a cero.
+        setTime(); // Actualiza la visualización del tiempo en la página, mostrándolo como 00:00:00.
+      };
+    </script>
+  </body>
+</html>
